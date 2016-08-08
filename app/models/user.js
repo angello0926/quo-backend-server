@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 const Post = require('../models/post');
 
-var UserSchema = new Schema({
+var userSchema = new Schema({
 
   email: {type: String, unique:true},
   password: {type: String},
@@ -30,7 +30,7 @@ var UserSchema = new Schema({
   }, { timestamps: true });
 
 
-UserSchema.pre('save', function (next) {
+userSchema.pre('save', function (next) {
     var user = this;
     if (this.isModified('password') || this.isNew) {
         bcrypt.genSalt(10, function (err, salt) {
@@ -50,7 +50,7 @@ UserSchema.pre('save', function (next) {
     }
 });
 
-UserSchema.methods.comparePassword = function (passw, cb) {
+userSchema.methods.comparePassword = function (passw, cb) {
     bcrypt.compare(passw, this.password, function (err, isMatch) {
         if (err) {
             return cb(err);
@@ -59,4 +59,6 @@ UserSchema.methods.comparePassword = function (passw, cb) {
     });
 };
 
-module.exports = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
