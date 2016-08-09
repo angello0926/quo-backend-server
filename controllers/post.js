@@ -1,7 +1,6 @@
 
 var uuid        = require('node-uuid');
 var AWS         = require('aws-sdk');
-AWS.config.loadFromPath('./s3_config.json');
 var s3Bucket    = new AWS.S3( { params: {Bucket: 'quo-mobile'} } );
 const Post = require('../app/models/post');
 const User = require('../app/models/user');
