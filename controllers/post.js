@@ -1,7 +1,7 @@
 
 var uuid        = require('node-uuid');
 var AWS         = require('aws-sdk');
-const s3Bucket = new AWS.S3({ params: {Bucket: 'quo-mobile'}});
+const s3 = new AWS.S3({ params: {Bucket: 'quo-mobile'}});
 const Post = require('../app/models/post');
 const User = require('../app/models/user');
 
@@ -23,7 +23,7 @@ exports.imageupload = (req, res) =>{
     ContentEncoding: 'base64',
     ContentType: 'image/png'
   };
-  s3Bucket.putObject(data, function(err, data){
+  s3.putObject(data, function(err, data){
     if (err) {
       console.log(err);
       console.log('Error uploading data: ', data);
@@ -38,7 +38,7 @@ exports.imageupload = (req, res) =>{
       req.user.save();
       var urlParams = {Bucket: 'quo-mobile', Key: unique+'.png'};
        console.log('succesfully uploaded the image!');
-      s3Bucket.getSignedUrl('getObject', urlParams, function(err, url){
+      s3.getSignedUrl('getObject', urlParams, function(err, url){
         console.log('the url of the image is', url);
         res.json({imgurl: url, img_name: unique+'.png'});
       });
