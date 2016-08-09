@@ -1,9 +1,10 @@
 
 var uuid        = require('node-uuid');
-var AWS         = require('aws-sdk');
-const s3 = new AWS.S3({ params: {Bucket: 'quo-mobile'}});
+var aws        = require('aws-sdk');
+const s3 = new aws.S3();
 const Post = require('../app/models/post');
 const User = require('../app/models/user');
+
 
 AWS.config.update({
   credentials: new AWS.CognitoIdentityCredentials({
@@ -18,6 +19,7 @@ exports.imageupload = (req, res) =>{
   var unique = uuid.v1();
   buf = new Buffer(req.body.imageBinary.replace(/^data:image\/\w+;base64,/, ""),'base64')
   var data = {
+    Bucket: S3_BUCKET_NAME,
     Key: unique+'.png',
     Body: buf,
     ContentEncoding: 'base64',
