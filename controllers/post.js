@@ -7,7 +7,7 @@ const User = require('../app/models/user');
 
 
 aws.config.update({
-  credentials: new AWS.CognitoIdentityCredentials({
+  credentials: new aws.CognitoIdentityCredentials({
     IdentityPoolId: 'us-east-1-foo-bar'
   }),
   region: 'us-east-1'
