@@ -19,7 +19,7 @@ exports.imageupload = (req, res) =>{
   var unique = uuid.v1();
   buf = new Buffer(req.body.imageBinary.replace(/^data:image\/\w+;base64,/, ""),'base64')
   var data = {
-    Bucket: S3_BUCKET_NAME,
+    Bucket: "quo-mobile",
     Key: unique+'.png',
     Body: buf,
     ContentEncoding: 'base64',
