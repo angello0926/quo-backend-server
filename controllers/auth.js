@@ -12,7 +12,8 @@ exports.signup = (req, res) => {
   } else {
     var newUser = new User({
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      profile:{ picture : 'default-propic.svg'}
     });
 
     // save the user
@@ -51,27 +52,7 @@ exports.authenticate = (req, res) => {
 };
 
 exports.memberinfo =(req, res) =>{
-   console.log("memberinfo");
-    console.log(req.user);
-  // var token = getToken(req.headers);
-  //   if (token) {
-  //     var decoded = jwt.decode(token, config.secret);
-
-  //     console.log(decoded);
-  //     User.findOne({
-  //       email: decoded.email
-  //     }, function(err, user) {
-  //         if (err) throw err;
-
-  //         if (!user) {
-  //           return res.status(403).send({success: false, msg: 'Authentication failed. User not found.'});
-  //         } else {
-  //           res.json({success: true, msg: 'Welcome in the member area ' + user.email + '!'});
-  //         }
-  //     });
-  //   } else {
-  //     return res.status(403).send({success: false, msg: 'No token provided.'});
-  //   }
+    res.json({info: req.user});
 };
 
 var getToken = function (headers) {

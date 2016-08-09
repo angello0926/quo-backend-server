@@ -60,3 +60,74 @@ exports.submission =(req, res) => {
  })
 
 }
+
+exports.getAllFeeds = (req, res) => {
+
+  Post
+  .find({'published':true})
+  .populate('_creator')
+  .sort({'createdAt':-1})
+  .exec(function (err, posts) {
+    res.json({posts: posts});
+  });
+
+}
+
+exports.getOnePost= (req, res) => {
+ Post
+ .find({'quote_pic':req.params.img})
+ .populate('_creator')
+ .exec(function (err, entry) {
+
+  // Post.findOne({'quote_pic':req.params.img}, function(err, doc){
+  //   var isInbookmark = doc.bookmarked.some(function (user) {
+  //     return user.equals(req.user._id);
+  //   })
+  //   User.findOne({'_id':req.user.id}, function(err, doc){
+  //     console.log(doc);
+  //      var isInArray = doc.following.some(function(user) {
+  //       console.log(req.params.creator)
+  //       return user.equals(req.params.creator);
+  //   });
+  //   console.log(isInArray);
+  //   console.log(isInbookmark);
+  //res.send({post: entry, bookmark: isInbookmark, following:isInArray, requser:req.user._id});
+  res.json({post: entry});
+  })
+
+}
+
+
+
+exports.getReqUserPosts = (req, res) => {
+  console.log(req.user);
+  var arraypost= req.user.posts;
+  var num_p=arraypost.length;
+  var following=req.user.following;
+  var num_f=following.length;
+  var followers= req.user.followers;
+  var num_ff=followers.length;
+
+  Post
+    .find({'_creator': req.user._id})
+    .sort({'createdAt':-1})
+    .exec(function (err, posts) {
+    res.json({
+      userInfo: { pic: req.user.profile.picture, name: req.user.profile.name},posts: posts , postno: num_p , subscribe: num_f , followers: num_ff});
+    })
+};
+
+exports.deletePost = (req, res) => {
+
+  var quoteFilename=req.params.name;
+  console.log(quoteFilename)
+  Post
+  .findOne({'quote_pic': quoteFilename })
+  .exec(function (err, post){
+    var objid=post._id;
+    User.update({ _id: req.user.id }, {$pullAll: {posts: [objid ]}}).exec(function(err,data){
+      post.remove();
+      res.send('success');
+    });
+  });
+};

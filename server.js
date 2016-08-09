@@ -54,6 +54,11 @@ apiRoutes.get('/memberinfo', passport.authenticate('jwt', { session: false}), au
 apiRoutes.post('/imageupload', passport.authenticate('jwt', { session: false}),postController.imageupload);
 apiRoutes.post('/submit', passport.authenticate('jwt', { session: false}),postController.submission);
 
+//routes for get home posts
+apiRoutes.get('/getallposts', passport.authenticate('jwt', { session: false}), postController.getAllFeeds);
+apiRoutes.get('/posts/:img', passport.authenticate('jwt', { session: false}), postController.getOnePost);
+apiRoutes.get('/getuserposts', passport.authenticate('jwt', { session: false}), postController.getReqUserPosts);
+apiRoutes.delete('/delete/:name', passport.authenticate('jwt', { session: false}), postController.deletePost);
 
 
 // connect the api routes under /api/*
