@@ -5,6 +5,13 @@ const s3 = new AWS.S3({ params: {Bucket: 'quo-mobile'}});
 const Post = require('../app/models/post');
 const User = require('../app/models/user');
 
+AWS.config.update({
+  credentials: new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: 'us-east-1-foo-bar'
+  }),
+  region: 'us-east-1'
+});
+
 
 exports.imageupload = (req, res) =>{
   console.log(req.user);
