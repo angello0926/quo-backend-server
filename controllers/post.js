@@ -6,7 +6,7 @@ const Post = require('../app/models/post');
 const User = require('../app/models/user');
 
 
-AWS.config.update({
+aws.config.update({
   credentials: new AWS.CognitoIdentityCredentials({
     IdentityPoolId: 'us-east-1-foo-bar'
   }),
