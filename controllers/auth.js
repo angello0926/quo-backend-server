@@ -4,6 +4,16 @@ var morgan      = require('morgan');
 var mongoose    = require('mongoose');
 var passport  = require('passport');
 var config      = require('../config/database');
+var uuid        = require('node-uuid');
+var aws        = require('aws-sdk');
+const s3 = new aws.S3();
+
+aws.config.update({
+  credentials: new aws.CognitoIdentityCredentials({
+    IdentityPoolId: 'us-east-1-foo-bar'
+  }),
+  region: 'us-east-1'
+});
 
 
 exports.signup = (req, res) => {
@@ -67,5 +77,35 @@ var getToken = function (headers) {
     return null;
   }
 };
+
+
+exports.savepropic = (req, res) =>{
+  console.log(req.user);
+  var unique = uuid.v1();
+  buf = new Buffer(req.body.imageBinary.replace(/^data:image\/\w+;base64,/, ""),'base64')
+  var data = {
+    Bucket: "quo-mobile",
+    Key: unique+'.png',
+    Body: buf,
+    ContentEncoding: 'base64',
+    ContentType: 'image/png'
+  };
+  s3.putObject(data, function(err, data){
+    if (err) {
+      console.log(err);
+      console.log('Error uploading data: ', data);
+    } else {
+      var urlParams = {Bucket: 'quo-mobile', Key: unique+'.png'};
+       console.log('succesfully uploaded the image!');
+      s3.getSignedUrl('getObject', urlParams, function(err, url){
+          req.user.profile.picture=unique+'.png';
+          req.user.save();
+          console.log(req.user);
+        console.log('the url of the image is', url);
+        res.json({imgurl: url, img_name: unique+'.png'});
+      });
+    }
+  });
+}
 
 
