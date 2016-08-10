@@ -59,7 +59,7 @@ apiRoutes.get('/getallposts', passport.authenticate('jwt', { session: false}), p
 apiRoutes.get('/posts/:img', passport.authenticate('jwt', { session: false}), postController.getOnePost);
 apiRoutes.get('/getuserposts', passport.authenticate('jwt', { session: false}), postController.getReqUserPosts);
 apiRoutes.delete('/delete/:name', passport.authenticate('jwt', { session: false}), postController.deletePost);
-
+apiRoutes.post('/savepropic', passport.authenticate('jwt', { session: false}),authController.savepropic);
 
 // connect the api routes under /api/*
 app.use('/api', apiRoutes);
