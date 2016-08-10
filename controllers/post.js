@@ -70,15 +70,29 @@ exports.submission =(req, res) => {
 }
 
 exports.getAllFeeds = (req, res) => {
-
+  var postFollowButton =[];
   Post
   .find({'published':true})
   .populate('_creator')
   .sort({'createdAt':-1})
   .exec(function (err, posts) {
-    res.json({posts: posts});
+    User.findById(req.user.id, function(err, user){
+       console.log("User.findById");
+       console.log(user);
+       console.log("posts");
+       console.log(posts)
+       for(var i = 0; i<posts.length;i++){
+          var author = posts[i]._creator._id;
+          if( user.following.indexOf(author) != -1){
+            console.log('following');
+            postFollowButton.push('Unfollow');
+          }else{
+            postFollowButton.push('Follow');
+          }
+       }
+       res.json({posts: posts, followInfo: postFollowButton});
+    });
   });
-
 }
 
 exports.getOnePost= (req, res) => {

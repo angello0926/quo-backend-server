@@ -109,3 +109,10 @@ exports.savepropic = (req, res) =>{
 }
 
 
+exports.editprofile =(req, res) =>{
+    console.log(req.body);
+    req.user.profile.name=req.body.name;
+    req.user.profile.about=req.body.about;
+    req.user.save();
+    res.json({user: req.user});
+};

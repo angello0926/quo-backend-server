@@ -10,6 +10,7 @@ var port        = process.env.PORT || 8080;
 
 const authController = require('./controllers/auth');
 const postController = require('./controllers/post');
+const subscribeController = require('./controllers/subs');
 
 
 // get our request parameters
@@ -60,6 +61,9 @@ apiRoutes.get('/posts/:img', passport.authenticate('jwt', { session: false}), po
 apiRoutes.get('/getuserposts', passport.authenticate('jwt', { session: false}), postController.getReqUserPosts);
 apiRoutes.delete('/delete/:name', passport.authenticate('jwt', { session: false}), postController.deletePost);
 apiRoutes.post('/savepropic', passport.authenticate('jwt', { session: false}),authController.savepropic);
+apiRoutes.post('/editprofile', passport.authenticate('jwt', { session: false}),authController.editprofile);
+apiRoutes.get('/follow/:userid', passport.authenticate('jwt', { session: false}),subscribeController.followUser);
+apiRoutes.get('/subs', passport.authenticate('jwt', { session: false}),subscribeController.showSubs);
 
 // connect the api routes under /api/*
 app.use('/api', apiRoutes);
